@@ -28,10 +28,10 @@ function PostOrder(expression) {
             number += c;
         } else {
             if (number != '') {
-                postFixStack.push(number);
+                postFixStack.push(parseFloat(number));
                 number = '';
             }
-            
+
             if (c == ')') {
                 while (opStack[opStack.length - 1] != '(') {
                     postFixStack.push(opStack.pop());
@@ -57,4 +57,32 @@ function PostOrder(expression) {
     return postFixStack;
 }
 
-console.log(PostOrder("(1+2*(3-4))/5"));
+function Calculate(operator, b, a) {
+    switch (operator) {
+        case "^":
+            return Math.pow(a, b);
+        case "*":
+            return a * b;
+        case "/":
+            return a / b;
+        case "+":
+            return a + b
+        case "-":
+            return a- b;
+    }
+}
+
+function Calculator(expression) {
+    var answer = [];
+    var postExpression = PostOrder(expression);
+
+    for (var i = 0; i < postExpression.length; i++) {
+        if (Order(postExpression[i])) {
+            answer.push(Calculate(postExpression[i], answer.pop(), answer.pop()));
+        } else {
+            answer.push(postExpression[i]);
+        }
+    }
+    return answer[0];
+}
+console.log(Calculator("7^2+10*(14+13)*11-13*13"));
