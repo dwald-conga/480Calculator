@@ -21,7 +21,7 @@ function PostOrder(expression) {
     var postFixStack = [];
     var opStack = [];
     var number = '';
-
+   
     for (var i = 0; i < expression.length; i++) {
         var c = expression.charAt(i);
         if (!isNaN(parseInt(c)) || c == '.') {
@@ -31,10 +31,12 @@ function PostOrder(expression) {
                 postFixStack.push(parseFloat(number));
                 number = '';
             }
-
             if (c == ')') {
-                while (opStack[opStack.length - 1] != '(') {
+                for (; opStack.length > 0 && opStack[opStack.length - 1] != '(';) {
                     postFixStack.push(opStack.pop());
+                }
+                if (opStack.length == 0) {
+                    throw "no opening parenthesy";
                 }
                 opStack.pop();
             } else {
@@ -47,42 +49,69 @@ function PostOrder(expression) {
     }
 
     if (number != '') {
-        postFixStack.push(number);
+        postFixStack.push(parseFloat(number));
     }
 
-    while (opStack.length) {
-        postFixStack.push(opStack.pop());
+    while (0 < opStack.length) {
+        var operator = opStack.pop();
+        if (operator == '(') {
+            throw "no closing parenthesy"
+            return;
+        } else {
+            postFixStack.push(operator);
+        }
     }
 
     return postFixStack;
 }
 
-function Calculate(operator, b, a) {
+function Calculate(operator, b, a) { 
     switch (operator) {
         case "^":
             return Math.pow(a, b);
         case "*":
-            return a * b;
+            return a*b;
         case "/":
-            return a / b;
+            if (b == 0) {
+                throw "div by 0";
+            }
+            return a/b;
         case "+":
-            return a + b
+            return a+b
         case "-":
-            return a- b;
+            return a-b;
     }
 }
 
 function Calculator(expression) {
     var answer = [];
-    var postExpression = PostOrder(expression);
+    var postExpression = [];
 
+    try {
+        postExpression = PostOrder(expression);
+        console.log(postExpression);
+    } catch (e) {
+        console.log(e);
+        return;
+    }
+    
     for (var i = 0; i < postExpression.length; i++) {
         if (Order(postExpression[i])) {
-            answer.push(Calculate(postExpression[i], answer.pop(), answer.pop()));
+            try {
+                var calculatedValue = Calculate(postExpression[i], answer.pop(), answer.pop());
+                if (calculatedValue == "-Infinity" || calculatedValue == "Infinity") {
+                    throw "number too large or small"
+                }
+                answer.push(calculatedValue);
+            } catch (e) {
+                //divide by 0
+                console.log(e);
+                return;
+            }
         } else {
             answer.push(postExpression[i]);
         }
     }
     return answer[0];
 }
-console.log(Calculator("7^2+10*(14+13)*11-13*13"));
+console.log(Calculator("(1+2*(3-4))/5"));
