@@ -146,7 +146,171 @@ export default class ButtonBasics extends Component {
         return answer[0];
     }
 
+
+    RunCalculator() {
+        var result = this.Calculator(this.state.text);
+
+        if (result == null) {
+            this.setState({ text: "Error", newEquation: true })
+        } else {
+            this.setState({ text: result, newEquation: false })
+        }
+    }
+    _onPressButton(val) {
+        if (this.state.newEquation) {
+            this.setState({ text: val, newEquation: false });
+        } else {
+            this.setState({ text: this.state.text + val });
+        }
+    }
+
+    clearText = () => {
+        this.setState({ text: "" });
+    }
+
+    state = { text: "", newEquation: true }
+
     render() {
-        return ( );
-}
+        return (
+            <Grid style={{ margin: 30 }}>
+                <Row>
+                    <Text
+                        style={{ height: 50, width: 200, marginHorizontal: 20, borderWidth: 1, borderColor: '#ccc' }}
+                    >
+                        {this.state.text}
+                    </Text>
+                </Row>
+                <Row>
+                    <Col>
+                        <Button
+                            title="("
+                            onPress={() => this._onPressButton('(')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title=")"
+                            onPress={() => this._onPressButton(')')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="^"
+                            onPress={() => this._onPressButton('^')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="/"
+                            onPress={() => this._onPressButton('/')}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Button
+                            title="7"
+                            onPress={() => this._onPressButton('7')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="8"
+                            onPress={() => this._onPressButton('8')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="9"
+                            onPress={() => this._onPressButton('9')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="*"
+                            onPress={() => this._onPressButton('*')}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Button
+                            title="4"
+                            onPress={() => this._onPressButton('4')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="5"
+                            onPress={() => this._onPressButton('5')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="6"
+                            onPress={() => this._onPressButton('6')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="-"
+                            onPress={() => this._onPressButton('-')}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Button
+                            title="1"
+                            onPress={() => this._onPressButton('1')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="2"
+                            onPress={() => this._onPressButton('2')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="3"
+                            onPress={() => this._onPressButton('3')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="+"
+                            onPress={() => this._onPressButton('+')}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Button
+                            title="0"
+                            onPress={() => this._onPressButton('0')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="."
+                            onPress={() => this._onPressButton('.')}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="C"
+                            onPress={this.clearText}
+                        />
+                    </Col>
+                    <Col>
+                        <Button
+                            title="="
+                            onPress={() => this.RunCalculator()}
+                        />
+                    </Col>
+                </Row>
+            </Grid>
+        );
+    }
 }
